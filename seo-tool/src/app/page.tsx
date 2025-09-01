@@ -9,6 +9,7 @@ import GitHubIntegration from '@/components/GitHubIntegration';
 type Tab = 'seo' | 'github' | 'tools';
 
 // Animation variants
+// Updated for Vercel deployment - September 2025
 const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
@@ -69,114 +70,6 @@ const heroVariants = {
 };
 
 export default function Home() {
-  const [activeTab, setActiveTab] = useState<Tab>('seo');
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
-  const tabs = [
-    { id: 'seo' as Tab, label: 'SEO Analyzer', icon: Search, description: 'Comprehensive website analysis' },
-    { id: 'github' as Tab, label: 'GitHub Integration', icon: Github, description: 'Repository optimization' },
-    { id: 'tools' as Tab, label: 'Advanced Tools', icon: BarChart3, description: 'Professional insights' }
-  ];
-
-  const renderTabContent = () => {
-    switch (activeTab) {
-      case 'seo':
-        return (
-          <motion.div
-            key="seo"
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -20 }}
-            transition={{ duration: 0.3 }}
-          >
-            <SEOAnalyzer />
-          </motion.div>
-        );
-      case 'github':
-        return (
-          <motion.div
-            key="github"
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -20 }}
-            transition={{ duration: 0.3 }}
-          >
-            <GitHubIntegration />
-          </motion.div>
-        );
-      case 'tools':
-        return (
-          <motion.div
-            key="tools"
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -20 }}
-            transition={{ duration: 0.3 }}
-            className="space-y-6"
-          >
-            <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl p-4 text-center border border-slate-700 shadow-xl sm:p-6 md:p-8">
-              <motion.div
-                animate={{ 
-                  rotate: [0, 10, -10, 0],
-                  scale: [1, 1.1, 1]
-                }}
-                transition={{ 
-                  duration: 2,
-                  repeat: Infinity,
-                  ease: "easeInOut"
-                }}
-                className="inline-block mb-4 sm:mb-6"
-              >
-                <BarChart3 className="h-8 w-8 text-blue-400 mx-auto sm:h-12 sm:w-12 md:h-16 md:w-16" />
-              </motion.div>
-              <h2 className="text-lg font-bold text-slate-100 mb-2 sm:text-xl md:text-2xl">
-                Advanced SEO Tools & Analytics
-              </h2>
-              <p className="text-xs text-slate-300 mb-4 max-w-2xl mx-auto sm:text-sm md:text-base sm:mb-6">
-                Professional-grade SEO analysis tools built by KhuzaimaAftab-crypto, 
-                showcasing expertise in full-stack development, blockchain technology, 
-                and modern web optimization techniques.
-              </p>
-              
-              <div className="grid grid-cols-1 gap-3 mt-4 sm:grid-cols-3 sm:gap-4 md:gap-6 md:mt-6">
-                <motion.div 
-                  className="bg-slate-800/50 p-3 rounded-xl shadow-lg border border-slate-700 backdrop-blur-sm sm:p-4 md:p-6"
-                  whileHover={{ scale: 1.05, y: -5 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <TrendingUp className="h-5 w-5 text-emerald-400 mx-auto mb-2 sm:h-6 sm:w-6 md:h-8 md:w-8" />
-                  <h3 className="font-semibold text-slate-100 mb-1 text-xs sm:text-sm md:text-base">Performance Optimization</h3>
-                  <p className="text-xs text-slate-400 sm:text-xs md:text-sm">Advanced techniques for speed and efficiency</p>
-                </motion.div>
-                
-                <motion.div 
-                  className="bg-slate-800/50 p-3 rounded-xl shadow-lg border border-slate-700 backdrop-blur-sm sm:p-4 md:p-6"
-                  whileHover={{ scale: 1.05, y: -5 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <Zap className="h-5 w-5 text-violet-400 mx-auto mb-2 sm:h-6 sm:w-6 md:h-8 md:w-8" />
-                  <h3 className="font-semibold text-slate-100 mb-1 text-xs sm:text-sm md:text-base">Blockchain Integration</h3>
-                  <p className="text-xs text-slate-400 sm:text-xs md:text-sm">Web3 and cryptocurrency optimization</p>
-                </motion.div>
-                
-                <motion.div 
-                  className="bg-slate-800/50 p-3 rounded-xl shadow-lg border border-slate-700 backdrop-blur-sm sm:p-4 md:p-6"
-                  whileHover={{ scale: 1.05, y: -5 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <Star className="h-5 w-5 text-amber-400 mx-auto mb-2 sm:h-6 sm:w-6 md:h-8 md:w-8" />
-                  <h3 className="font-semibold text-slate-100 mb-1 text-xs sm:text-sm md:text-base">Elite Development</h3>
-                  <p className="text-xs text-slate-400 sm:text-xs md:text-sm">Top-tier full-stack solutions</p>
-                </motion.div>
-              </div>
-            </div>
-          </motion.div>
-        );
-      default:
-        return null;
-    }
-  };
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-900 to-slate-800">
       {/* Animated Background Elements */}
