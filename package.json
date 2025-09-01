@@ -1,0 +1,18 @@
+{
+  "dependencies": {
+    "@headlessui/react": "^2.2.7",
+    "@heroicons/react": "^2.2.0",
+    "@types/cheerio": "^0.22.35",
+    "@types/react-syntax-highlighter": "^15.5.13",
+    "axios": "^1.11.0",
+    "cheerio": "^1.1.2",
+    "clsx": "^2.1.1",
+    "framer-motion": "^12.23.12",
+    "lighthouse": "^12.8.2",
+    "lucide-react": "^0.542.0",
+    "puppeteer": "^24.17.1",
+    "react-hot-toast": "^2.6.0",
+    "react-syntax-highlighter": "^15.6.6",
+    "tailwind-merge": "^3.3.1"
+  }
+}
