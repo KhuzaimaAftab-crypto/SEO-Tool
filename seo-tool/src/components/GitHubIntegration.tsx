@@ -14,22 +14,29 @@ export default function GitHubIntegration() {
   const [error, setError] = useState('');
   const [isTokenSet, setIsTokenSet] = useState(false);
   const [analyzingRepo, setAnalyzingRepo] = useState<string | null>(null);
+  const [mounted, setMounted] = useState(false);
 
   const githubService = new GitHubService();
   const seoAnalyzer = new SEOAnalyzer();
 
   useEffect(() => {
-    // Check if token is already stored (in a real app, use secure storage)
-    const savedToken = localStorage.getItem('github-token');
-    if (savedToken) {
-      setToken(savedToken);
-      setIsTokenSet(true);
-      githubService.setToken(savedToken);
-    }
+    setMounted(true);
   }, []);
 
+  useEffect(() => {
+    // Only access localStorage after component is mounted (client-side)
+    if (mounted) {
+      const savedToken = localStorage.getItem('github-token');
+      if (savedToken) {
+        setToken(savedToken);
+        setIsTokenSet(true);
+        githubService.setToken(savedToken);
+      }
+    }
+  }, [mounted]);
+
   const handleSetToken = () => {
-    if (!token.trim()) return;
+    if (!token.trim() || !mounted) return;
     
     localStorage.setItem('github-token', token);
     setIsTokenSet(true);
@@ -38,6 +45,8 @@ export default function GitHubIntegration() {
   };
 
   const handleClearToken = () => {
+    if (!mounted) return;
+    
     localStorage.removeItem('github-token');
     setToken('');
     setIsTokenSet(false);
