@@ -14,5 +14,7 @@
       "src": "/(.*)",
       "dest": "seo-tool/$1"
     }
-  ]
+  ],
+  "buildCommand": "cd seo-tool && npm install && npm run build",
+  "outputDirectory": "seo-tool/.next"
 }
