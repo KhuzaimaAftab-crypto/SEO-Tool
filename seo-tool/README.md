@@ -110,12 +110,47 @@ GITHUB_TOKEN=your_github_token_here
 
 ---
 
+## ☁️ Deployment
+
+### Vercel Deployment (Recommended)
+
+This project is optimized for deployment on Vercel. Follow these steps:
+
+1. **Connect to Vercel**:
+   - Go to [Vercel Dashboard](https://vercel.com/dashboard)
+   - Click "New Project"
+   - Import your GitHub repository
+
+2. **Configure Project**:
+   - Framework Preset: Next.js
+   - Root Directory: `seo-tool`
+   - Build Command: `npm run build`
+   - Output Directory: `.next`
+
+3. **Environment Variables**:
+   - Add `GITHUB_TOKEN` in Vercel project settings
+
+4. **Deploy**:
+   - Click "Deploy" and wait for the build to complete
+
+### Manual Deployment
+
+```bash
+# Build the project
+npm run build
+
+# Start the production server
+npm start
+```
+
+---
+
 ## 🛠️ Technology Stack
 
 ### Frontend Technologies
 | Technology | Version | Purpose |
 |------------|---------|----------|
-| **Next.js** | 15.5.2 | React framework with SSR/SSG |
+| **Next.js** | 15.5.2 | React framework with SSR/SG |
 | **React** | 19.1.0 | Component-based UI library |
 | **TypeScript** | Latest | Type-safe development |
 | **Tailwind CSS** | 4.x | Utility-first CSS framework |
@@ -198,110 +233,4 @@ const analyzeRepository = async (owner: string, repo: string) => {
 
 ### Technical SEO
 - **Schema Markup**: Rich snippets implementation
-- **Meta Tags**: Comprehensive meta tag optimization
-- **Open Graph**: Social media sharing optimization
-- **Sitemap**: Automated XML sitemap generation
-- **Robots.txt**: Search engine crawling guidelines
-
-### Performance Optimization
-- **Code Splitting**: Automatic bundle optimization
-- **Image Optimization**: Next.js Image component
-- **Lazy Loading**: Progressive content loading
-- **Caching**: Strategic caching implementation
-
----
-
-## 🔧 API Documentation
-
-### SEO Analysis Endpoint
-
-```bash
-POST /api/seo-analyze
-Content-Type: application/json
-
-{
-  "url": "https://example.com"
-}
 ```
-
-**Response:**
-```json
-{
-  "score": 85,
-  "title": "Example Site",
-  "description": "Site description",
-  "issues": [],
-  "suggestions": [],
-  "headings": {
-    "h1": ["Main Heading"],
-    "h2": ["Subheading 1", "Subheading 2"]
-  },
-  "images": {
-    "total": 10,
-    "withAlt": 8,
-    "withoutAlt": 2
-  }
-}
-```
-
----
-
-## 🌟 Why Choose KhuzaimaAftab-crypto?
-
-### 💼 Professional Excellence
-- **5+ Years** of full-stack development experience
-- **Expert-level** React, Node.js, and blockchain development
-- **Proven track record** in delivering high-quality applications
-- **Strong focus** on performance, security, and scalability
-
-### 🔐 Blockchain Expertise
-- **Smart Contract Development**: Audited and secure contract implementations
-- **DeFi Protocol Design**: Complex financial product development
-- **NFT Marketplace Creation**: End-to-end marketplace solutions
-- **Web3 Integration**: Seamless blockchain-web integration
-
-### 🚀 Modern Development Practices
-- **Test-Driven Development**: Comprehensive testing strategies
-- **CI/CD Implementation**: Automated deployment pipelines
-- **Code Quality**: ESLint, Prettier, and TypeScript best practices
-- **Performance Monitoring**: Real-time application monitoring
-
----
-
-## 📞 Contact & Collaboration
-
-### 🔗 Professional Links
-- **GitHub**: [KhuzaimaAftab-crypto](https://github.com/KhuzaimaAftab-crypto)
-- **Portfolio**: Coming Soon
-- **LinkedIn**: Professional networking
-- **Email**: Available upon request
-
-### 💡 Available for:
-- **Full-Stack Development Projects**
-- **Blockchain & DeFi Applications**
-- **React/Next.js Consultation**
-- **SEO & Performance Optimization**
-- **Technical Architecture Review**
-- **Code Review & Mentoring**
-
----
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
----
-
-## 🙏 Acknowledgments
-
-- **Next.js Team** for the amazing framework
-- **Vercel** for hosting and deployment solutions
-- **Tailwind CSS** for the utility-first CSS framework
-- **Framer Motion** for smooth animations
-- **React Community** for continuous innovation
-
----
-
-**Built with ❤️ by KhuzaimaAftab-crypto - Elite Full Stack & Blockchain Developer**
-
-*Transforming ideas into scalable, secure, and performant web applications*

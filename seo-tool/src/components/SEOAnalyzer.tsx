@@ -1,29 +1,101 @@
-'use client';
-
-import { useState } from 'react';
-import { Search, ExternalLink, AlertCircle, CheckCircle, Globe, TrendingUp, Eye, Clock } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { SEOAnalysis } from '@/types';
+import { motion } from 'framer-motion';
+import { 
+  Globe, 
+  TrendingUp, 
+  ExternalLink, 
+  Eye, 
+  CheckCircle, 
+  AlertCircle,
+  Search,
+  BarChart3
+} from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { SEOAnalysis } from '@/types';
 
-const SEOAnalysisCard = ({ analysis }: { analysis: SEOAnalysis }) => {
+const SEOAnalysisCard = ({ analysis }: { analysis?: SEOAnalysis }) => {
   const getScoreColor = (score: number) => {
-    if (score >= 80) return 'text-green-600';
-    if (score >= 60) return 'text-yellow-600';
-    return 'text-red-600';
+    if (score >= 80) return 'text-emerald-400';
+    if (score >= 60) return 'text-amber-400';
+    return 'text-rose-400';
   };
 
   const getScoreBg = (score: number) => {
-    if (score >= 80) return 'bg-green-100';
-    if (score >= 60) return 'bg-yellow-100';
-    return 'bg-red-100';
+    if (score >= 80) return 'bg-emerald-900/50';
+    if (score >= 60) return 'bg-amber-900/50';
+    return 'bg-rose-900/50';
   };
 
   const getScoreGradient = (score: number) => {
-    if (score >= 80) return 'from-green-500 to-emerald-600';
-    if (score >= 60) return 'from-yellow-500 to-orange-600';
-    return 'from-red-500 to-rose-600';
+    if (score >= 80) return 'from-emerald-500 to-emerald-600';
+    if (score >= 60) return 'from-amber-500 to-orange-600';
+    return 'from-rose-500 to-rose-600';
   };
+
+  const getScoreBorder = (score: number) => {
+    if (score >= 80) return 'border-emerald-700';
+    if (score >= 60) return 'border-amber-700';
+    return 'border-rose-700';
+  };
+
+  // If no analysis is provided, show a form to enter a URL
+  if (!analysis) {
+    return (
+      <motion.div 
+        className="bg-slate-800/50 rounded-xl shadow-xl p-6 space-y-6 border border-slate-700 overflow-hidden relative backdrop-blur-sm"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        <div className="text-center">
+          <motion.div
+            animate={{ rotate: [0, 360] }}
+            transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+            className="inline-block mb-4"
+          >
+            <Globe className="h-12 w-12 text-blue-400 mx-auto" />
+          </motion.div>
+          <h2 className="text-2xl font-bold text-slate-100 mb-2">SEO Analysis Tool</h2>
+          <p className="text-slate-400 mb-6">Enter a website URL to analyze its SEO performance</p>
+          
+          <div className="max-w-md mx-auto">
+            <div className="flex space-x-2">
+              <input
+                type="url"
+                placeholder="https://example.com"
+                className="flex-1 px-4 py-3 border border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-slate-700/50 text-slate-100 placeholder-slate-500"
+              />
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="px-6 py-3 bg-blue-600 text-slate-100 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 flex items-center space-x-2"
+              >
+                <Search className="h-5 w-5" />
+                <span>Analyze</span>
+              </motion.button>
+            </div>
+          </div>
+        </div>
+        
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
+          <div className="bg-slate-700/50 p-4 rounded-lg border border-slate-700">
+            <BarChart3 className="h-8 w-8 text-blue-400 mb-3 mx-auto" />
+            <h3 className="font-semibold text-slate-100 text-center mb-1">Comprehensive Analysis</h3>
+            <p className="text-slate-400 text-sm text-center">Detailed SEO metrics and insights</p>
+          </div>
+          <div className="bg-slate-700/50 p-4 rounded-lg border border-slate-700">
+            <TrendingUp className="h-8 w-8 text-emerald-400 mb-3 mx-auto" />
+            <h3 className="font-semibold text-slate-100 text-center mb-1">Performance Metrics</h3>
+            <p className="text-slate-400 text-sm text-center">Page speed and optimization scores</p>
+          </div>
+          <div className="bg-slate-700/50 p-4 rounded-lg border border-slate-700">
+            <Globe className="h-8 w-8 text-violet-400 mb-3 mx-auto" />
+            <h3 className="font-semibold text-slate-100 text-center mb-1">Technical SEO</h3>
+            <p className="text-slate-400 text-sm text-center">Crawling, indexing, and mobile optimization</p>
+          </div>
+        </div>
+      </motion.div>
+    );
+  }
 
   const cardVariants = {
     hidden: { opacity: 0, y: 50, scale: 0.9 },
@@ -50,58 +122,58 @@ const SEOAnalysisCard = ({ analysis }: { analysis: SEOAnalysis }) => {
 
   return (
     <motion.div 
-      className="bg-white rounded-2xl shadow-xl p-8 space-y-8 border border-gray-100 overflow-hidden relative"
+      className="bg-slate-800/50 rounded-xl shadow-xl p-3 space-y-4 border border-slate-700 overflow-hidden relative backdrop-blur-sm sm:p-4 md:p-6"
       variants={cardVariants}
       initial="hidden"
       animate="visible"
     >
       {/* Animated background gradient */}
-      <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 via-transparent to-purple-50/50 pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-br from-slate-800/30 via-transparent to-slate-900/30 pointer-events-none" />
       
       {/* Header */}
       <motion.div 
-        className="flex items-center justify-between relative z-10"
+        className="flex flex-col items-center justify-between relative z-10 gap-3 sm:flex-row sm:gap-4"
         variants={itemVariants}
       >
-        <div className="flex items-center space-x-3">
+        <div className="flex items-center space-x-2 sm:space-x-3">
           <motion.div
             animate={{ rotate: [0, 360] }}
             transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
           >
-            <Globe className="h-6 w-6 text-blue-600" />
+            <Globe className="h-5 w-5 text-blue-400 sm:h-6 sm:w-6" />
           </motion.div>
           <div>
-            <h2 className="text-2xl font-bold text-gray-900">SEO Analysis Results</h2>
-            <p className="text-sm text-gray-500">Comprehensive website audit</p>
+            <h2 className="text-base font-bold text-slate-100 sm:text-lg md:text-xl">SEO Analysis Results</h2>
+            <p className="text-xs text-slate-400 sm:text-sm">Comprehensive website audit</p>
           </div>
         </div>
         
         <motion.div 
-          className={cn("px-6 py-3 rounded-2xl text-lg font-bold flex items-center space-x-2 shadow-lg", getScoreBg(analysis.score))}
+          className={cn("px-3 py-1.5 rounded-lg text-sm font-bold flex items-center space-x-1.5 shadow-md border w-full sm:w-auto justify-center", getScoreBg(analysis.score), getScoreBorder(analysis.score))}
           whileHover={{ scale: 1.05 }}
           transition={{ duration: 0.2 }}
         >
-          <TrendingUp className={cn("h-5 w-5", getScoreColor(analysis.score))} />
+          <TrendingUp className={cn("h-3.5 w-3.5", getScoreColor(analysis.score))} />
           <span className={getScoreColor(analysis.score)}>Score: {analysis.score}/100</span>
         </motion.div>
       </motion.div>
 
       {/* URL */}
       <motion.div 
-        className="flex items-center space-x-3 text-gray-600 bg-gray-50 p-4 rounded-xl relative z-10"
+        className="flex items-center space-x-2 text-slate-300 bg-slate-700/50 p-2.5 rounded-lg relative z-10 border border-slate-700 sm:p-3 md:p-4"
         variants={itemVariants}
         whileHover={{ scale: 1.02 }}
       >
-        <ExternalLink className="h-5 w-5 text-blue-500" />
+        <ExternalLink className="h-3.5 w-3.5 text-blue-400 flex-shrink-0 sm:h-4 sm:w-4" />
         <a 
           href={analysis.url} 
           target="_blank" 
           rel="noopener noreferrer" 
-          className="hover:text-blue-600 transition-colors font-medium flex-1 truncate"
+          className="hover:text-blue-300 transition-colors font-medium flex-1 truncate text-xs sm:text-sm"
         >
           {analysis.url}
         </a>
-        <Eye className="h-4 w-4 text-gray-400" />
+        <Eye className="h-3.5 w-3.5 text-slate-500 flex-shrink-0 sm:h-4 sm:w-4" />
       </motion.div>
 
       {/* Score Progress Circle */}
@@ -109,19 +181,19 @@ const SEOAnalysisCard = ({ analysis }: { analysis: SEOAnalysis }) => {
         className="flex justify-center relative z-10"
         variants={itemVariants}
       >
-        <div className="relative w-32 h-32">
-          <svg className="w-32 h-32 transform -rotate-90" viewBox="0 0 36 36">
+        <div className="relative w-20 h-20 sm:w-24 sm:h-24 md:w-32 md:h-32">
+          <svg className="w-20 h-20 transform -rotate-90 sm:w-24 sm:h-24 md:w-32 md:h-32" viewBox="0 0 36 36">
             <path
-              className="text-gray-200"
+              className="text-slate-700"
               stroke="currentColor"
-              strokeWidth="3"
+              strokeWidth="2.5"
               fill="none"
               d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
             />
             <motion.path
               className={cn("text-transparent")}
               stroke="url(#scoreGradient)"
-              strokeWidth="3"
+              strokeWidth="2.5"
               strokeLinecap="round"
               fill="none"
               d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
@@ -138,7 +210,7 @@ const SEOAnalysisCard = ({ analysis }: { analysis: SEOAnalysis }) => {
           </svg>
           <div className="absolute inset-0 flex items-center justify-center">
             <motion.span 
-              className={cn("text-3xl font-bold", getScoreColor(analysis.score))}
+              className={cn("text-xl font-bold", getScoreColor(analysis.score))}
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ delay: 1, duration: 0.5, type: "spring" }}
@@ -151,33 +223,39 @@ const SEOAnalysisCard = ({ analysis }: { analysis: SEOAnalysis }) => {
 
       {/* Basic Info */}
       <motion.div 
-        className="grid grid-cols-1 md:grid-cols-2 gap-6 relative z-10"
+        className="grid grid-cols-1 gap-3 relative z-10 sm:grid-cols-2 sm:gap-4"
         variants={itemVariants}
       >
         <motion.div 
-          className="space-y-3"
+          className="space-y-2.5"
           whileHover={{ scale: 1.02 }}
           transition={{ duration: 0.2 }}
         >
-          <h3 className="font-semibold text-gray-900 flex items-center space-x-2">
-            <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
-            <span>Page Title</span>
+          <h3 className="font-semibold text-slate-100 flex items-center space-x-1.5 sm:space-x-2">
+            <div className="w-1.5 h-1.5 bg-blue-500 rounded-full sm:w-2 sm:h-2"></div>
+            <span className="text-xs sm:text-sm">Page Title</span>
           </h3>
-          <div className="bg-gradient-to-r from-blue-50 to-blue-100 p-4 rounded-xl border border-blue-200">
-            <p className="text-gray-800 font-medium">
+          <div className="bg-gradient-to-r from-slate-700/50 to-slate-800/50 p-2.5 rounded-lg border border-slate-700 sm:p-3 md:p-4">
+            <p className="text-slate-200 font-medium text-xs sm:text-sm">
               {analysis.title || 'No title found'}
             </p>
             {analysis.title && (
               <motion.p 
-                className="text-sm text-blue-600 mt-2 font-medium"
+                className="text-[0.6rem] mt-1.5 font-medium sm:text-xs"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.3 }}
               >
                 {analysis.title.length} characters
                 {analysis.title.length >= 30 && analysis.title.length <= 60 ? 
-                  <span className="text-green-600 ml-2">✓ Optimal</span> : 
-                  <span className="text-yellow-600 ml-2">⚠ Needs improvement</span>
+                  <span className="text-emerald-400 ml-1.5 flex items-center sm:ml-2">
+                    <CheckCircle className="h-2.5 w-2.5 inline mr-1 sm:h-3 sm:w-3" />
+                    Optimal
+                  </span> : 
+                  <span className="text-amber-400 ml-1.5 flex items-center sm:ml-2">
+                    <AlertCircle className="h-2.5 w-2.5 inline mr-1 sm:h-3 sm:w-3" />
+                    Needs improvement
+                  </span>
                 }
               </motion.p>
             )}
@@ -185,29 +263,35 @@ const SEOAnalysisCard = ({ analysis }: { analysis: SEOAnalysis }) => {
         </motion.div>
 
         <motion.div 
-          className="space-y-3"
+          className="space-y-2.5"
           whileHover={{ scale: 1.02 }}
           transition={{ duration: 0.2 }}
         >
-          <h3 className="font-semibold text-gray-900 flex items-center space-x-2">
-            <div className="w-3 h-3 bg-purple-500 rounded-full"></div>
-            <span>Meta Description</span>
+          <h3 className="font-semibold text-slate-100 flex items-center space-x-1.5 sm:space-x-2">
+            <div className="w-1.5 h-1.5 bg-violet-500 rounded-full sm:w-2 sm:h-2"></div>
+            <span className="text-xs sm:text-sm">Meta Description</span>
           </h3>
-          <div className="bg-gradient-to-r from-purple-50 to-purple-100 p-4 rounded-xl border border-purple-200">
-            <p className="text-gray-800">
+          <div className="bg-gradient-to-r from-slate-700/50 to-slate-800/50 p-2.5 rounded-lg border border-slate-700 sm:p-3 md:p-4">
+            <p className="text-slate-200 text-xs sm:text-sm">
               {analysis.description || 'No description found'}
             </p>
             {analysis.description && (
               <motion.p 
-                className="text-sm text-purple-600 mt-2 font-medium"
+                className="text-[0.6rem] mt-1.5 font-medium sm:text-xs"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.4 }}
               >
                 {analysis.description.length} characters
                 {analysis.description.length >= 120 && analysis.description.length <= 160 ? 
-                  <span className="text-green-600 ml-2">✓ Optimal</span> : 
-                  <span className="text-yellow-600 ml-2">⚠ Needs improvement</span>
+                  <span className="text-emerald-400 ml-1.5 flex items-center sm:ml-2">
+                    <CheckCircle className="h-2.5 w-2.5 inline mr-1 sm:h-3 sm:w-3" />
+                    Optimal
+                  </span> : 
+                  <span className="text-amber-400 ml-1.5 flex items-center sm:ml-2">
+                    <AlertCircle className="h-2.5 w-2.5 inline mr-1 sm:h-3 sm:w-3" />
+                    Needs improvement
+                  </span>
                 }
               </motion.p>
             )}
@@ -217,26 +301,26 @@ const SEOAnalysisCard = ({ analysis }: { analysis: SEOAnalysis }) => {
 
       {/* Headings Structure */}
       <motion.div 
-        className="space-y-4 relative z-10"
+        className="space-y-3 relative z-10"
         variants={itemVariants}
       >
-        <h3 className="font-semibold text-gray-900 flex items-center space-x-2">
-          <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-          <span>Headings Structure</span>
+        <h3 className="font-semibold text-slate-100 flex items-center space-x-1.5 sm:space-x-2">
+          <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full sm:w-2 sm:h-2"></div>
+          <span className="text-xs sm:text-sm">Headings Structure</span>
         </h3>
-        <div className="grid grid-cols-2 md:grid-cols-6 gap-3">
+        <div className="grid grid-cols-3 gap-1.5 sm:grid-cols-6 sm:gap-2 md:gap-3">
           {Object.entries(analysis.headings).map(([tag, headings], index) => (
             <motion.div 
               key={tag} 
-              className="bg-gradient-to-br from-green-50 to-emerald-100 p-4 rounded-xl text-center border border-green-200 shadow-sm"
+              className="bg-gradient-to-br from-slate-700/50 to-slate-800/50 p-2 rounded-lg text-center border border-slate-700 shadow-sm sm:p-2.5 md:p-3"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5 + index * 0.1 }}
               whileHover={{ scale: 1.05, y: -2 }}
             >
-              <div className="font-bold text-green-700 text-lg">{tag.toUpperCase()}</div>
+              <div className="font-bold text-emerald-400 text-xs sm:text-sm md:text-base">{tag.toUpperCase()}</div>
               <motion.div 
-                className="text-2xl font-bold text-green-600 mt-1"
+                className="text-lg font-bold text-emerald-300 mt-1 sm:text-xl md:text-2xl"
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
                 transition={{ delay: 0.7 + index * 0.1, type: "spring" }}
@@ -248,35 +332,209 @@ const SEOAnalysisCard = ({ analysis }: { analysis: SEOAnalysis }) => {
         </div>
       </motion.div>
 
-      {/* Images, Links, and other metrics... */}
-      {/* ... rest of the existing content with animations ... */}
-      
+      {/* Images Analysis */}
+      <motion.div 
+        className="space-y-3 relative z-10"
+        variants={itemVariants}
+      >
+        <h3 className="font-semibold text-slate-100 flex items-center space-x-1.5 sm:space-x-2">
+          <div className="w-1.5 h-1.5 bg-amber-500 rounded-full sm:w-2 sm:h-2"></div>
+          <span className="text-xs sm:text-sm">Images Analysis</span>
+        </h3>
+        <div className="grid grid-cols-1 gap-2 sm:grid-cols-3 sm:gap-3">
+          <motion.div 
+            className="bg-gradient-to-br from-slate-700/50 to-slate-800/50 p-2.5 rounded-lg border border-slate-700 sm:p-3"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.8 }}
+            whileHover={{ scale: 1.02 }}
+          >
+            <div className="flex items-center justify-between">
+              <span className="text-slate-300 text-[0.6rem] sm:text-xs">Total Images</span>
+              <Globe className="h-3 w-3 text-amber-400 sm:h-4 sm:w-4" />
+            </div>
+            <div className="text-lg font-bold text-amber-400 mt-1 sm:text-xl">{analysis.images.total}</div>
+          </motion.div>
+          
+          <motion.div 
+            className="bg-gradient-to-br from-slate-700/50 to-slate-800/50 p-2.5 rounded-lg border border-slate-700 sm:p-3"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.9 }}
+            whileHover={{ scale: 1.02 }}
+          >
+            <div className="flex items-center justify-between">
+              <span className="text-slate-300 text-[0.6rem] sm:text-xs">With Alt Text</span>
+              <CheckCircle className="h-3 w-3 text-emerald-400 sm:h-4 sm:w-4" />
+            </div>
+            <div className="text-lg font-bold text-emerald-400 mt-1 sm:text-xl">{analysis.images.withAlt}</div>
+          </motion.div>
+          
+          <motion.div 
+            className="bg-gradient-to-br from-slate-700/50 to-slate-800/50 p-2.5 rounded-lg border border-slate-700 sm:p-3"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1.0 }}
+            whileHover={{ scale: 1.02 }}
+          >
+            <div className="flex items-center justify-between">
+              <span className="text-slate-300 text-[0.6rem] sm:text-xs">Missing Alt</span>
+              <AlertCircle className="h-3 w-3 text-rose-400 sm:h-4 sm:w-4" />
+            </div>
+            <div className="text-lg font-bold text-rose-400 mt-1 sm:text-xl">{analysis.images.withoutAlt}</div>
+          </motion.div>
+        </div>
+        
+        {analysis.images.missingAlt.length > 0 && (
+          <motion.div 
+            className="bg-rose-900/20 border border-rose-800 rounded-lg p-2.5 mt-2 sm:p-3"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1.1 }}
+          >
+            <h4 className="font-medium text-rose-300 flex items-center text-xs sm:text-sm">
+              <AlertCircle className="h-3 w-3 mr-1.5 sm:h-4 sm:w-4" />
+              Images Missing Alt Text:
+            </h4>
+            <ul className="mt-1.5 space-y-1 max-h-20 overflow-y-auto text-[0.6rem] sm:text-xs">
+              {analysis.images.missingAlt.slice(0, 3).map((src, index) => (
+                <li key={index} className="text-rose-200 truncate" title={src}>
+                  • {src}
+                </li>
+              ))}
+              {analysis.images.missingAlt.length > 3 && (
+                <li className="text-rose-300 text-[0.6rem] sm:text-xs">
+                  ... and {analysis.images.missingAlt.length - 3} more
+                </li>
+              )}
+            </ul>
+          </motion.div>
+        )}
+      </motion.div>
+
+      {/* Links Analysis */}
+      <motion.div 
+        className="space-y-3 relative z-10"
+        variants={itemVariants}
+      >
+        <h3 className="font-semibold text-slate-100 flex items-center space-x-1.5 sm:space-x-2">
+          <div className="w-1.5 h-1.5 bg-blue-500 rounded-full sm:w-2 sm:h-2"></div>
+          <span className="text-xs sm:text-sm">Links Analysis</span>
+        </h3>
+        <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 sm:gap-3">
+          <motion.div 
+            className="bg-gradient-to-br from-slate-700/50 to-slate-800/50 p-2.5 rounded-lg border border-slate-700 sm:p-3"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1.2 }}
+            whileHover={{ scale: 1.02 }}
+          >
+            <div className="flex items-center justify-between">
+              <span className="text-slate-300 text-[0.6rem] sm:text-xs">Internal Links</span>
+              <Globe className="h-3 w-3 text-blue-400 sm:h-4 sm:w-4" />
+            </div>
+            <div className="text-lg font-bold text-blue-400 mt-1 sm:text-xl">{analysis.links.internal}</div>
+          </motion.div>
+          
+          <motion.div 
+            className="bg-gradient-to-br from-slate-700/50 to-slate-800/50 p-2.5 rounded-lg border border-slate-700 sm:p-3"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1.3 }}
+            whileHover={{ scale: 1.02 }}
+          >
+            <div className="flex items-center justify-between">
+              <span className="text-slate-300 text-[0.6rem] sm:text-xs">External Links</span>
+              <ExternalLink className="h-3 w-3 text-violet-400 sm:h-4 sm:w-4" />
+            </div>
+            <div className="text-lg font-bold text-violet-400 mt-1 sm:text-xl">{analysis.links.external}</div>
+          </motion.div>
+        </div>
+      </motion.div>
+
+      {/* Social Media */}
+      <motion.div 
+        className="space-y-3 relative z-10"
+        variants={itemVariants}
+      >
+        <h3 className="font-semibold text-slate-100 flex items-center space-x-1.5 sm:space-x-2">
+          <div className="w-1.5 h-1.5 bg-violet-500 rounded-full sm:w-2 sm:h-2"></div>
+          <span className="text-xs sm:text-sm">Social Media Optimization</span>
+        </h3>
+        <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 sm:gap-3">
+          <motion.div 
+            className="bg-gradient-to-br from-slate-700/50 to-slate-800/50 p-2.5 rounded-lg border border-slate-700 sm:p-3"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1.4 }}
+            whileHover={{ scale: 1.02 }}
+          >
+            <div className="flex items-center justify-between">
+              <span className="text-slate-300 text-[0.6rem] sm:text-xs">Open Graph Tags</span>
+              {analysis.socialMedia.ogTitle ? (
+                <CheckCircle className="h-3 w-3 text-emerald-400 sm:h-4 sm:w-4" />
+              ) : (
+                <AlertCircle className="h-3 w-3 text-rose-400 sm:h-4 sm:w-4" />
+              )}
+            </div>
+            <div className="text-[0.6rem] text-slate-400 mt-1 sm:text-xs">
+              {analysis.socialMedia.ogTitle ? 'Present' : 'Missing'}
+            </div>
+          </motion.div>
+          
+          <motion.div 
+            className="bg-gradient-to-br from-slate-700/50 to-slate-800/50 p-2.5 rounded-lg border border-slate-700 sm:p-3"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1.5 }}
+            whileHover={{ scale: 1.02 }}
+          >
+            <div className="flex items-center justify-between">
+              <span className="text-slate-300 text-[0.6rem] sm:text-xs">Twitter Cards</span>
+              {analysis.socialMedia.twitterTitle ? (
+                <CheckCircle className="h-3 w-3 text-emerald-400 sm:h-4 sm:w-4" />
+              ) : (
+                <AlertCircle className="h-3 w-3 text-rose-400 sm:h-4 sm:w-4" />
+              )}
+            </div>
+            <div className="text-[0.6rem] text-slate-400 mt-1 sm:text-xs">
+              {analysis.socialMedia.twitterTitle ? 'Present' : 'Missing'}
+            </div>
+          </motion.div>
+        </div>
+      </motion.div>
+
       {/* Issues and Suggestions */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 relative z-10">
+      <div className="grid grid-cols-1 gap-3 relative z-10 sm:grid-cols-2 sm:gap-4">
         {analysis.issues.length > 0 && (
           <motion.div 
-            className="space-y-3"
+            className="space-y-2.5"
             variants={itemVariants}
             whileHover={{ scale: 1.02 }}
           >
-            <h3 className="font-semibold text-gray-900 flex items-center space-x-2">
-              <AlertCircle className="h-5 w-5 text-red-500" />
-              <span>Issues Found</span>
+            <h3 className="font-semibold text-slate-100 flex items-center space-x-1.5 sm:space-x-2">
+              <AlertCircle className="h-3 w-3 text-rose-400 sm:h-4 sm:w-4" />
+              <span className="text-xs sm:text-sm">Issues Found</span>
             </h3>
-            <div className="bg-red-50 border border-red-200 rounded-xl p-4">
-              <ul className="space-y-2">
-                {analysis.issues.map((issue, index) => (
+            <div className="bg-rose-900/20 border border-rose-800 rounded-lg p-2.5 sm:p-3">
+              <ul className="space-y-1.5">
+                {analysis.issues.slice(0, 3).map((issue, index) => (
                   <motion.li 
                     key={index} 
-                    className="text-sm text-red-700 flex items-start space-x-2"
+                    className="text-rose-200 flex items-start space-x-1.5 text-[0.6rem] sm:text-xs"
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 1 + index * 0.1 }}
                   >
-                    <span className="text-red-500 mt-1 font-bold">•</span>
+                    <span className="text-rose-400 mt-0.5 font-bold text-[0.5rem">•</span>
                     <span className="font-medium">{issue}</span>
                   </motion.li>
                 ))}
+                {analysis.issues.length > 3 && (
+                  <li className="text-rose-300 text-[0.6rem] sm:text-xs">
+                    ... and {analysis.issues.length - 3} more issues
+                  </li>
+                )}
               </ul>
             </div>
           </motion.div>
@@ -284,28 +542,33 @@ const SEOAnalysisCard = ({ analysis }: { analysis: SEOAnalysis }) => {
 
         {analysis.suggestions.length > 0 && (
           <motion.div 
-            className="space-y-3"
+            className="space-y-2.5"
             variants={itemVariants}
             whileHover={{ scale: 1.02 }}
           >
-            <h3 className="font-semibold text-gray-900 flex items-center space-x-2">
-              <CheckCircle className="h-5 w-5 text-green-500" />
-              <span>Improvement Suggestions</span>
+            <h3 className="font-semibold text-slate-100 flex items-center space-x-1.5 sm:space-x-2">
+              <CheckCircle className="h-3 w-3 text-emerald-400 sm:h-4 sm:w-4" />
+              <span className="text-xs sm:text-sm">Improvement Suggestions</span>
             </h3>
-            <div className="bg-green-50 border border-green-200 rounded-xl p-4">
-              <ul className="space-y-2">
-                {analysis.suggestions.map((suggestion, index) => (
+            <div className="bg-emerald-900/20 border border-emerald-800 rounded-lg p-2.5 sm:p-3">
+              <ul className="space-y-1.5">
+                {analysis.suggestions.slice(0, 3).map((suggestion, index) => (
                   <motion.li 
                     key={index} 
-                    className="text-sm text-green-700 flex items-start space-x-2"
+                    className="text-emerald-200 flex items-start space-x-1.5 text-[0.6rem] sm:text-xs"
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 1.2 + index * 0.1 }}
                   >
-                    <span className="text-green-500 mt-1 font-bold">✓</span>
+                    <span className="text-emerald-400 mt-0.5 font-bold text-[0.5rem]">✓</span>
                     <span className="font-medium">{suggestion}</span>
                   </motion.li>
                 ))}
+                {analysis.suggestions.length > 3 && (
+                  <li className="text-emerald-300 text-[0.6rem] sm:text-xs">
+                    ... and {analysis.suggestions.length - 3} more suggestions
+                  </li>
+                )}
               </ul>
             </div>
           </motion.div>
@@ -315,216 +578,4 @@ const SEOAnalysisCard = ({ analysis }: { analysis: SEOAnalysis }) => {
   );
 };
 
-export default function SEOAnalyzer() {
-  const [url, setUrl] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [analysis, setAnalysis] = useState<SEOAnalysis | null>(null);
-  const [error, setError] = useState('');
-
-  const handleAnalyze = async () => {
-    if (!url.trim()) return;
-
-    setLoading(true);
-    setError('');
-    setAnalysis(null);
-
-    try {
-      const response = await fetch('/api/seo-analyze', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ url }),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Failed to analyze URL');
-      }
-
-      const result = await response.json();
-      setAnalysis(result);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'An error occurred during analysis');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  return (
-    <div className="space-y-8">
-      {/* Enhanced Input Section */}
-      <motion.div 
-        className="bg-gradient-to-br from-white to-blue-50 rounded-2xl shadow-xl p-8 border border-blue-100"
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, ease: "easeOut" }}
-      >
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.2, duration: 0.5 }}
-        >
-          <h2 className="text-3xl font-bold text-gray-900 mb-2 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-            Professional Website SEO Analysis
-          </h2>
-          <p className="text-gray-600 mb-6">
-            Advanced SEO auditing tool by <span className="font-semibold text-blue-600">KhuzaimaAftab-crypto</span> - 
-            Elite Full Stack & Blockchain Developer
-          </p>
-        </motion.div>
-        
-        <motion.div 
-          className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3"
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.4, duration: 0.5 }}
-        >
-          <div className="flex-1 relative">
-            <motion.div
-              className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none"
-              animate={{ scale: url ? 1.1 : 1 }}
-              transition={{ duration: 0.2 }}
-            >
-              <Globe className="h-5 w-5 text-gray-400" />
-            </motion.div>
-            <motion.input
-              type="url"
-              value={url}
-              onChange={(e) => setUrl(e.target.value)}
-              placeholder="Enter website URL (e.g., https://example.com)"
-              className="w-full pl-12 pr-4 py-4 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-200 text-lg bg-white/80 backdrop-blur-sm"
-              onKeyPress={(e) => e.key === 'Enter' && handleAnalyze()}
-              whileFocus={{ scale: 1.02 }}
-              transition={{ duration: 0.2 }}
-            />
-          </div>
-          
-          <motion.button
-            onClick={handleAnalyze}
-            disabled={loading || !url.trim()}
-            className="px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl hover:from-blue-700 hover:to-purple-700 focus:outline-none focus:ring-4 focus:ring-blue-500/20 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-3 font-semibold text-lg shadow-lg transition-all duration-200"
-            whileHover={{ scale: loading ? 1 : 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            transition={{ duration: 0.2 }}
-          >
-            {loading ? (
-              <>
-                <motion.div
-                  className="w-5 h-5 border-2 border-white border-t-transparent rounded-full"
-                  animate={{ rotate: 360 }}
-                  transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                />
-                <span>Analyzing...</span>
-              </>
-            ) : (
-              <>
-                <Search className="h-5 w-5" />
-                <span>Analyze Website</span>
-              </>
-            )}
-          </motion.button>
-        </motion.div>
-        
-        <motion.div 
-          className="mt-6 flex flex-wrap items-center justify-center gap-4 text-sm text-gray-500"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.6, duration: 0.5 }}
-        >
-          <div className="flex items-center space-x-2">
-            <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-            <span>Comprehensive SEO Audit</span>
-          </div>
-          <div className="flex items-center space-x-2">
-            <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
-            <span>Performance Analysis</span>
-          </div>
-          <div className="flex items-center space-x-2">
-            <div className="w-2 h-2 bg-purple-500 rounded-full animate-pulse"></div>
-            <span>Optimization Recommendations</span>
-          </div>
-        </motion.div>
-      </motion.div>
-
-      {/* Error State */}
-      <AnimatePresence>
-        {error && (
-          <motion.div 
-            className="bg-red-50 border-2 border-red-200 rounded-xl p-6 shadow-lg"
-            initial={{ opacity: 0, scale: 0.9, y: -20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.9, y: -20 }}
-            transition={{ duration: 0.4, ease: "easeOut" }}
-          >
-            <div className="flex items-center space-x-3">
-              <motion.div
-                animate={{ rotate: [0, 10, -10, 0] }}
-                transition={{ duration: 0.5 }}
-              >
-                <AlertCircle className="h-6 w-6 text-red-500" />
-              </motion.div>
-              <div>
-                <h3 className="font-semibold text-red-800">Analysis Error</h3>
-                <p className="text-red-700">{error}</p>
-              </div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* Loading State */}
-      <AnimatePresence>
-        {loading && (
-          <motion.div 
-            className="bg-blue-50 border-2 border-blue-200 rounded-xl p-6 shadow-lg"
-            initial={{ opacity: 0, scale: 0.9, y: -20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.9, y: -20 }}
-            transition={{ duration: 0.4, ease: "easeOut" }}
-          >
-            <div className="flex items-center space-x-4">
-              <motion.div
-                className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full"
-                animate={{ rotate: 360 }}
-                transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-              />
-              <div>
-                <h3 className="font-semibold text-blue-800">Analyzing Your Website</h3>
-                <p className="text-blue-700">Performing comprehensive SEO audit... This may take a few moments.</p>
-              </div>
-            </div>
-            
-            <motion.div 
-              className="mt-4 bg-blue-200 rounded-full h-2 overflow-hidden"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.5 }}
-            >
-              <motion.div
-                className="h-full bg-gradient-to-r from-blue-500 to-purple-600 rounded-full"
-                initial={{ width: "0%" }}
-                animate={{ width: "100%" }}
-                transition={{ duration: 3, ease: "easeInOut", repeat: Infinity }}
-              />
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* Results */}
-      <AnimatePresence>
-        {analysis && (
-          <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -50 }}
-            transition={{ duration: 0.6, ease: "easeOut" }}
-          >
-            <SEOAnalysisCard analysis={analysis} />
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
-  );
-}
+export default SEOAnalysisCard;

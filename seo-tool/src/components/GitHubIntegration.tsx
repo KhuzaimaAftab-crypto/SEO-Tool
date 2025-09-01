@@ -91,6 +91,9 @@ export default function GitHubIntegration() {
   };
 
   const formatDate = (dateString: string) => {
+    // Only format date client-side to prevent hydration mismatch
+    if (!mounted) return dateString;
+    
     return new Date(dateString).toLocaleDateString('en-US', {
       year: 'numeric',
       month: 'short',
@@ -98,38 +101,57 @@ export default function GitHubIntegration() {
     });
   };
 
+  // Don't render until mounted to prevent hydration errors
+  if (!mounted) {
+    return (
+      <div className="space-y-4">
+        <div className="bg-slate-800 rounded-lg shadow-md p-4 border border-slate-700">
+          <h2 className="text-lg font-semibold text-slate-100 mb-3 flex items-center space-x-2">
+            <Github className="h-4 w-4" />
+            <span>GitHub Integration</span>
+          </h2>
+          <div className="text-center py-3">
+            <div className="animate-pulse">
+              <div className="h-3 bg-slate-700 rounded w-3/4 mx-auto"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       {/* Token Input Section */}
-      <div className="bg-white rounded-lg shadow-md p-6">
-        <h2 className="text-xl font-semibold text-gray-900 mb-4 flex items-center space-x-2">
-          <Github className="h-5 w-5" />
+      <div className="bg-slate-800 rounded-lg shadow-md p-4 border border-slate-700">
+        <h2 className="text-lg font-semibold text-slate-100 mb-3 flex items-center space-x-2">
+          <Github className="h-4 w-4" />
           <span>GitHub Integration</span>
         </h2>
         
         {!isTokenSet ? (
-          <div className="space-y-4">
-            <p className="text-gray-600 text-sm">
+          <div className="space-y-3">
+            <p className="text-slate-400 text-xs sm:text-sm">
               Enter your GitHub Personal Access Token to analyze your repositories with GitHub Pages.
             </p>
-            <div className="flex space-x-2">
+            <div className="flex flex-col space-y-2 sm:flex-row sm:space-y-0 sm:space-x-2">
               <input
                 type="password"
                 value={token}
                 onChange={(e) => setToken(e.target.value)}
                 placeholder="ghp_xxxxxxxxxxxxxxxxxxxx"
-                className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="flex-1 px-2.5 py-2 border border-slate-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-slate-700/50 text-slate-100 placeholder-slate-500 text-sm sm:px-3 sm:py-2.5"
               />
               <button
                 onClick={handleSetToken}
                 disabled={!token.trim()}
-                className="px-4 py-2 bg-gray-900 text-white rounded-md hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="px-3 py-2 bg-blue-600 text-slate-100 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:px-4 sm:py-2.5"
               >
                 Connect
               </button>
             </div>
-            <div className="bg-blue-50 border border-blue-200 rounded-md p-3">
-              <p className="text-blue-700 text-sm">
+            <div className="bg-blue-900/30 border border-blue-800 rounded-md p-2.5 sm:p-3">
+              <p className="text-blue-300 text-xs sm:text-sm">
                 <strong>How to get a GitHub token:</strong><br />
                 1. Go to GitHub Settings → Developer settings → Personal access tokens<br />
                 2. Generate a new token with &apos;repo&apos; and &apos;pages:read&apos; permissions<br />
@@ -138,22 +160,22 @@ export default function GitHubIntegration() {
             </div>
           </div>
         ) : (
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col space-y-3 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
             <div className="flex items-center space-x-2">
-              <CheckCircle className="h-5 w-5 text-green-500" />
-              <span className="text-green-700">GitHub token configured</span>
+              <CheckCircle className="h-4 w-4 text-emerald-400" />
+              <span className="text-emerald-300 text-sm">GitHub token configured</span>
             </div>
             <div className="flex space-x-2">
               <button
                 onClick={fetchRepos}
                 disabled={loading}
-                className="px-3 py-1 bg-blue-600 text-white rounded text-sm hover:bg-blue-700 disabled:opacity-50"
+                className="px-2.5 py-1.5 bg-blue-600 text-slate-100 rounded text-xs hover:bg-blue-700 disabled:opacity-50 text-sm sm:px-3 sm:py-2"
               >
                 Refresh Repos
               </button>
               <button
                 onClick={handleClearToken}
-                className="px-3 py-1 bg-red-600 text-white rounded text-sm hover:bg-red-700"
+                className="px-2.5 py-1.5 bg-rose-600 text-slate-100 rounded text-xs hover:bg-rose-700 text-sm sm:px-3 sm:py-2"
               >
                 Disconnect
               </button>
@@ -164,58 +186,58 @@ export default function GitHubIntegration() {
 
       {/* Error */}
       {error && (
-        <div className="bg-red-50 border border-red-200 rounded-md p-4">
+        <div className="bg-rose-900/30 border border-rose-800 rounded-md p-3">
           <div className="flex items-center space-x-2">
-            <AlertCircle className="h-5 w-5 text-red-400" />
-            <p className="text-red-700">{error}</p>
+            <AlertCircle className="h-4 w-4 text-rose-400" />
+            <p className="text-rose-300 text-sm">{error}</p>
           </div>
         </div>
       )}
 
       {/* Loading */}
       {loading && (
-        <div className="bg-blue-50 border border-blue-200 rounded-md p-4">
+        <div className="bg-blue-900/30 border border-blue-800 rounded-md p-3">
           <div className="flex items-center space-x-2">
-            <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-blue-600"></div>
-            <p className="text-blue-700">Fetching your repositories...</p>
+            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-400"></div>
+            <p className="text-blue-300 text-sm">Fetching your repositories...</p>
           </div>
         </div>
       )}
 
       {/* Repositories List */}
       {repos.length > 0 && (
-        <div className="bg-white rounded-lg shadow-md p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Your Repositories</h3>
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <div className="bg-slate-800 rounded-lg shadow-md p-4 border border-slate-700">
+          <h3 className="text-base font-semibold text-slate-100 mb-3">Your Repositories</h3>
+          <div className="grid gap-3 sm:gap-4 md:grid-cols-2 lg:grid-cols-3">
             {repos.map((repo) => (
               <div
                 key={repo.full_name}
-                className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow"
+                className="border border-slate-700 rounded-lg p-3 hover:shadow-lg transition-all bg-slate-700/30 hover:bg-slate-700/50 sm:p-4"
               >
                 <div className="flex items-start justify-between mb-2">
-                  <h4 className="font-medium text-gray-900 truncate flex-1">{repo.name}</h4>
+                  <h4 className="font-medium text-slate-100 truncate flex-1 text-sm sm:text-base">{repo.name}</h4>
                   {repo.language && (
-                    <span className="ml-2 px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded">
+                    <span className="ml-2 px-1.5 py-0.5 bg-slate-700 text-slate-300 text-[0.6rem] rounded sm:px-2 sm:py-1 sm:text-xs">
                       {repo.language}
                     </span>
                   )}
                 </div>
                 
                 {repo.description && (
-                  <p className="text-sm text-gray-600 mb-3 line-clamp-2">{repo.description}</p>
+                  <p className="text-xs text-slate-400 mb-2 line-clamp-2 sm:text-sm sm:mb-3">{repo.description}</p>
                 )}
                 
-                <div className="flex items-center space-x-4 text-sm text-gray-500 mb-3">
+                <div className="flex items-center space-x-3 text-[0.6rem] text-slate-500 mb-3 sm:text-xs sm:mb-4">
                   <div className="flex items-center space-x-1">
-                    <Star className="h-3 w-3" />
+                    <Star className="h-2.5 w-2.5 sm:h-3 sm:w-3" />
                     <span>{repo.stargazers_count}</span>
                   </div>
                   <div className="flex items-center space-x-1">
-                    <GitFork className="h-3 w-3" />
+                    <GitFork className="h-2.5 w-2.5 sm:h-3 sm:w-3" />
                     <span>{repo.forks_count}</span>
                   </div>
                   <div className="flex items-center space-x-1">
-                    <Calendar className="h-3 w-3" />
+                    <Calendar className="h-2.5 w-2.5 sm:h-3 sm:w-3" />
                     <span>{formatDate(repo.updated_at)}</span>
                   </div>
                 </div>
@@ -225,17 +247,17 @@ export default function GitHubIntegration() {
                     href={repo.html_url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex-1 px-3 py-1 bg-gray-100 text-gray-700 text-sm rounded text-center hover:bg-gray-200 flex items-center justify-center space-x-1"
+                    className="flex-1 px-2 py-1 bg-slate-700 text-slate-300 text-xs rounded text-center hover:bg-slate-600 flex items-center justify-center space-x-1 sm:px-3 sm:py-1.5 sm:text-sm"
                   >
-                    <ExternalLink className="h-3 w-3" />
+                    <ExternalLink className="h-2.5 w-2.5 sm:h-3 sm:w-3" />
                     <span>View</span>
                   </a>
                   <button
                     onClick={() => analyzeRepoPages(repo)}
                     disabled={analyzingRepo === repo.full_name}
-                    className="flex-1 px-3 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700 disabled:opacity-50 flex items-center justify-center space-x-1"
+                    className="flex-1 px-2 py-1 bg-blue-600 text-slate-100 text-xs rounded hover:bg-blue-700 disabled:opacity-50 flex items-center justify-center space-x-1 sm:px-3 sm:py-1.5 sm:text-sm"
                   >
-                    <Globe className="h-3 w-3" />
+                    <Globe className="h-2.5 w-2.5 sm:h-3 sm:w-3" />
                     <span>
                       {analyzingRepo === repo.full_name ? 'Analyzing...' : 'Analyze SEO'}
                     </span>
