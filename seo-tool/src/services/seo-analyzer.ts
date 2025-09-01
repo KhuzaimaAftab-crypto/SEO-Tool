@@ -2,6 +2,8 @@ import axios from 'axios';
 import * as cheerio from 'cheerio';
 import { SEOAnalysis } from '@/types';
 
+type CheerioAPI = cheerio.CheerioAPI;
+
 export class SEOAnalyzer {
   async analyzeURL(url: string): Promise<SEOAnalysis> {
     try {
@@ -45,24 +47,24 @@ export class SEOAnalyzer {
     }
   }
 
-  private extractHeadings($: cheerio.CheerioAPI) {
+  private extractHeadings($: ReturnType<typeof cheerio.load>) {
     return {
-      h1: $('h1').map((_, el) => $(el).text().trim()).get(),
-      h2: $('h2').map((_, el) => $(el).text().trim()).get(),
-      h3: $('h3').map((_, el) => $(el).text().trim()).get(),
-      h4: $('h4').map((_, el) => $(el).text().trim()).get(),
-      h5: $('h5').map((_, el) => $(el).text().trim()).get(),
-      h6: $('h6').map((_, el) => $(el).text().trim()).get(),
+      h1: $('h1').map((_: number, el: cheerio.Element) => $(el).text().trim()).get(),
+      h2: $('h2').map((_: number, el: cheerio.Element) => $(el).text().trim()).get(),
+      h3: $('h3').map((_: number, el: cheerio.Element) => $(el).text().trim()).get(),
+      h4: $('h4').map((_: number, el: cheerio.Element) => $(el).text().trim()).get(),
+      h5: $('h5').map((_: number, el: cheerio.Element) => $(el).text().trim()).get(),
+      h6: $('h6').map((_: number, el: cheerio.Element) => $(el).text().trim()).get(),
     };
   }
 
-  private analyzeImages($: cheerio.CheerioAPI) {
+  private analyzeImages($: ReturnType<typeof cheerio.load>) {
     const images = $('img');
     const total = images.length;
     let withAlt = 0;
     const missingAlt: string[] = [];
 
-    images.each((_, img) => {
+    images.each((_: number, img: cheerio.Element) => {
       const alt = $(img).attr('alt');
       const src = $(img).attr('src');
       
@@ -81,14 +83,14 @@ export class SEOAnalyzer {
     };
   }
 
-  private analyzeLinks($: cheerio.CheerioAPI, baseUrl: string) {
+  private analyzeLinks($: ReturnType<typeof cheerio.load>, baseUrl: string) {
     const links = $('a[href]');
     let internal = 0;
     let external = 0;
 
     const baseDomain = new URL(baseUrl).hostname;
 
-    links.each((_, link) => {
+    links.each((_: number, link: cheerio.Element) => {
       const href = $(link).attr('href');
       if (href) {
         if (href.startsWith('http')) {
@@ -107,7 +109,7 @@ export class SEOAnalyzer {
     return { internal, external };
   }
 
-  private analyzeSocialMedia($: cheerio.CheerioAPI) {
+  private analyzeSocialMedia($: ReturnType<typeof cheerio.load>) {
     return {
       ogTitle: $('meta[property="og:title"]').attr('content'),
       ogDescription: $('meta[property="og:description"]').attr('content'),
@@ -118,7 +120,7 @@ export class SEOAnalyzer {
     };
   }
 
-  private performSEOChecks(analysis: SEOAnalysis, $: cheerio.CheerioAPI) {
+  private performSEOChecks(analysis: SEOAnalysis, $: ReturnType<typeof cheerio.load>) {
     // Title checks
     if (!analysis.title) {
       analysis.issues.push('Missing page title');

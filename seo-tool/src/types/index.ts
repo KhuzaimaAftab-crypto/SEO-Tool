@@ -34,7 +34,7 @@ export interface SEOAnalysis {
     twitterDescription?: string;
     twitterImage?: string;
   };
-  schema?: any[];
+  schema?: Record<string, unknown>[];
   issues: string[];
   suggestions: string[];
   score: number;
